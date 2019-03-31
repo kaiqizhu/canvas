@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Kay's Canvas</title>
+  <style>
+  .canvascontainer{
+    display:flex;
+    flex-wrap:wrap;
+    flex:1;
+  }
+
+  canvas{
+    border:1px solid black;
+    background-color: white;
+  }
+
+  .colorpicker{
+    margin-top:10px;
+  }
+  </style>
+
+
+</head>
+<body>
+
+	<h1>Kay's Canvas</h1>
+  <div class="canvascontainer">
+	   <canvas id="canvas"> draw here!</canvas>
+
+</div>
+
+<div class="colorpicker">
+<label for = "colorWheel">Color:</label>
+<input type="color" value = "#FF0000" id = "colorWheel">
+</div>
+
+
+<script>
+
+
+
+
+window.onload = function(){
+  // Set up
+  var canvas = document.getElementById('canvas');
+  var context = canvas.getContext('2d');
+  var defaultColor = "red";
+  var color = defaultColor;
+  var colorWheel;
+
+  canvas.width = 0.8*window.innerWidth;
+  canvas.height = 0.8*window.innerHeight;
+
+  // Draw
+  document.addEventListener('mousedown', function(e){
+    context.moveTo(e.offsetX,e.offsetY);
+    canvas.addEventListener('mousemove', onMousemove);
+});
+
+  //Mobile draw
+  document.addEventListener('touchmove',function(e){
+    context.moveTo(e.touches[0].screenX,e.touches[0].screenY);
+    canvas.addEventListener('touchmove', onTouchmove);
+  });
+  //Key Change Color
+  document.addEventListener('keydown', function(e){
+    //blue
+    if(e.keyCode == 66){
+        context.closePath();
+        context.beginPath();
+        color = "blue";
+    }
+    //red
+    else if(e.keyCode == 82){
+        context.closePath();
+        context.beginPath();
+        color = "red";
+    }
+    //green
+    else if(e.keyCode == 71){
+        context.closePath();
+        context.beginPath();
+        color = "green";
+    }
+    //yellow
+    else if(e.keyCode == 89){
+        context.closePath();
+        context.beginPath();
+        color = "yellow";
+    }
+    //add line weight
+    else if(e.keyCode==38){
+        context.closePath();
+        context.beginPath();
+        context.lineWidth = context.lineWidth + 1;
+    }
+    //decrease line weight
+    else if(e.keyCode==40){
+        context.closePath();
+        context.beginPath();
+        if (context.lineWidth > 1.1){
+          context.lineWidth = context.lineWidth - 1;
+        }
+    }
+    //clear canvas
+    else if(e.keyCode==32){
+        context.closePath();
+        context.beginPath();
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  });
+  //color picker
+  document.addEventListener("input", function(e){
+    context.closePath();
+    context.beginPath();
+    color = e.target.value;
+  });
+
+  //clear canvas mobile
+  document.addEventListener("orientationchange", function(e){
+    context.closePath();
+    context.beginPath();
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  });
+
+  // Helper function
+  //web
+  function onMousemove(e){
+    context.lineTo(e.offsetX, e.offsetY);
+    context.strokeStyle = color;
+    context.stroke();
+  }
+  //mobile
+  function onTouchmove(e){
+    context.lineTo(e.touches[0].screenX, e.touches[0].screenY);
+    context.stroke();
+  }
+
+
+}
+
+
+
+
+</script>
+
+
+</body>
